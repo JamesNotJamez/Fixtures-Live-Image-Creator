@@ -1,0 +1,6 @@
+selenium
+lxml
+beautifulsoup4
+Pillow
+instabot
+pyyaml
