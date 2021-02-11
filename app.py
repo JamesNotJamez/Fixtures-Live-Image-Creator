@@ -111,7 +111,7 @@ def get_data(table, team_name_map, teams=None,):
     return games
 
 def order_data(data):
-    list_order = list(team_name_map.keys())
+    list_order = list(team_name_map.values())
     # Order the games based on the list
     a = []
     for k in list_order:
