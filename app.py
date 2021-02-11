@@ -156,7 +156,7 @@ def make_image(data, image_type):
     # Else render all so the user can pick
     templates = [ os.getenv('TEMPLATE') ]
     if not templates[0]:
-        templates = os.listdir('./templates')
+        templates = os.listdir('/templates')
 
     print("Creating {} image for templates: {}".format(image_type, templates))
 
