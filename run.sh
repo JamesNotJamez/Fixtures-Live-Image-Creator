@@ -11,5 +11,3 @@ docker run -it --rm \
 	-e TYPE="fixtures" \
 	`#-e TEMPLATE="Brad1.png"` \
 	fl_image_generator:latest
-	
-	

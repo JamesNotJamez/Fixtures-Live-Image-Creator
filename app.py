@@ -167,7 +167,7 @@ def make_image(data, image_type):
             print("File {} not an image, ignoring".format(filename))
             continue
     
-        in_file = 'templates/{}'.format(filename) #1080 by 1080
+        in_file = '/templates/{}'.format(filename) #1080 by 1080
         out_file = '{}/{}'.format(dir_name, filename)
 
         # Create the image object from the file
