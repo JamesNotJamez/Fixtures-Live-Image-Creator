@@ -237,7 +237,11 @@ def make_image(data, image_type):
         # Save the image
         img.save(out_file)
 
-def this_week_teams(path='/teams.yml'):
+def this_week_teams(path='/this_weeks_teams.yml'):
+    # Read file that tells which teams are playing this week
+    # Avoids cases where fixtures or results for a team are still present from previous weeks
+    # Which gets used
+    # ++ deprecate the need for this by checking the date of the game against the current date
     if not os.path.exists(path):
         return None
     with open(path) as f:
