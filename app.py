@@ -10,17 +10,7 @@ import sys
 import re
 import os
 import yaml
-
-team_name_map = { 
-                "Men's 1s": "Men's 1s",
-                "Men's 2s": "Men's 2s",
-                "Men's 3s": "Men's 3s",
-                "Ladies 1st XI": "Ladies 1s",
-                "Ladies 2nd XI": "Ladies 2s",
-                "Mixed 1s": "Mixed" 
-                }
-
-
+import json
 
 def set_chrome_options() -> None:
     """Sets chrome options for Selenium.
@@ -39,8 +29,7 @@ def set_chrome_options() -> None:
     return chrome_options
 
 
-def get_table(driver):
-    url = "https://w.fixtureslive.com/club/826/whats-on/Chertsey-Thames-Valley"
+def get_table(driver, url):
     print("Getting driver for url - {}".format(url))
 
     driver.get(url)
@@ -57,7 +46,7 @@ def get_table(driver):
     return table_rows
 
 
-def get_data(table, teams=None):
+def get_data(table, team_name_map, teams=None,):
     games = dict()
     for tr in table:
         row = [ i.text for i in tr.find_all('td')]
@@ -122,13 +111,7 @@ def get_data(table, teams=None):
     return games
 
 def order_data(data):
-    list_order = [ "Men's 1s",
-                   "Men's 2s",
-                   "Men's 3s",
-                   "Ladies 1s",
-                   "Ladies 2s",
-                   "Mixed" 
-                 ]
+    list_order = list(team_name_map.keys())
     # Order the games based on the list
     a = []
     for k in list_order:
@@ -172,7 +155,7 @@ def make_image(data, image_type):
     # If a template env variable is set only use this template
     # Else render all so the user can pick
     templates = [ os.getenv('TEMPLATE') ]
-    if not templates:
+    if not templates[0]:
         templates = os.listdir('./templates')
 
     print("Creating {} image for templates: {}".format(image_type, templates))
@@ -274,11 +257,21 @@ if __name__ == "__main__":
         print("The TYPE environment variable must be set to one of [ fixtures, results ]")
         raise SystemExit
 
+    url = os.getenv('WHATSON_URL')
+    if not url:
+        print("The WHATSON_URL environment variable must be set")
+        raise SystemExit
+
+    #with open("./TeamMap.json") as f:
+     #   team_name_map = json.load(f)
+    with open("/TeamMap.yml") as f:
+        team_name_map = yaml.load(f, Loader=yaml.FullLoader)
+
     # Get a list of the teams playing this week
     # Mounted to the dockerfile manually, find a way to automate with dates
     this_week_teams = this_week_teams()
 
-    table = get_table(driver)
-    games = get_data(table, this_week_teams)
+    table = get_table(driver, url)
+    games = get_data(table, team_name_map, this_week_teams)
     data = order_data(games)
     make_image(data, image_type)

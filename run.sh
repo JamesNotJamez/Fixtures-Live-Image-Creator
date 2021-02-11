@@ -3,11 +3,12 @@
 SCRIPTPATH="$( cd "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
 
 docker run -it --rm \
-       -v $SCRIPTPATH/output/:/output \
-       -v $SCRIPTPATH/teams.yml:/teams.yml \
-       -e TYPE="fixtures" \
-       -e TEMPLATE="Brad1.png" \
-       insta_master:latest
-
-#       -v /Users/jamesralph/Documents/Coding/teams.yml:/teams.yml \
-#       insta_fixtures_images:latest
+    -v $SCRIPTPATH/output/:/output \
+	-v $SCRIPTPATH/teams.yml:/teams.yml \
+	-v $SCRIPTPATH/TeamMap.yml:/TeamMap.yml \
+	-e WHATSON_URL="https://w.fixtureslive.com/club/826/whats-on/Chertsey-Thames-Valley" \
+	-e TYPE="fixtures" \
+	`#-e TEMPLATE="Brad1.png"` \
+	fl_image_generator:latest
+	
+	
